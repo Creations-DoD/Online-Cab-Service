@@ -1,0 +1,19 @@
+# Ignore NetBeans specific files
+nbproject/private/
+build/
+dist/
+nbbuild/
+nbdist/
+.nb-gradle/
+
+# Ignore compiled files
+*.class
+*.jar
+*.war
+*.ear
+
+# Ignore log files
+*.log
+
+# Ignore dependency directories
+target/
