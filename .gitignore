@@ -17,3 +17,4 @@ nbdist/
 
 # Ignore dependency directories
 target/
+/mega_city_cab-services/nbproject/
