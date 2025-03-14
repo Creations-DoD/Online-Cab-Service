@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mega City Cabs</title>
+    <link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@400;700&display=swap" rel="stylesheet">
+    
+    <!-- <script src="login.js" type="text/javascript"></script> -->
+     <script src="index.js" type="text/javascript"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+ 
+
+    <style type="text/tailwindcss">
+        @import url('https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@400;700&display=swap');
+        .font-big-shoulders {
+            font-family: 'Big Shoulders Display', cursive;
+        }
+        .active-tab {
+            @apply text-red-600;
+            @apply border-b-2;
+            @apply border-solid;
+            @apply border-red-600;
+        }
+        .tab-content {
+            @apply hidden;
+        }
+        .tab-content.active {
+            @apply block;
+        }
+        .nested-tab-content {
+            @apply hidden;
+        }
+        .nested-tab-content.active {
+            @apply block;
+            /* display: block; */
+        }
+        .main-tab{
+            @apply text-white;
+            @apply bg-red-600;
+            @apply px-5 py-3;
+            @apply rounded-md;
+            @apply transition-colors;
+            @apply duration-300;
+            @apply border-b-4;
+            @apply border-solid;
+            @apply border-red-800;
+            @apply hover:bg-white;
+            @apply hover:text-red-600;
+            @apply hover:border-white;
+        }
+        .main-tab.active-tab {
+            @apply bg-white;
+            @apply text-red-600;
+            @apply border-red-600;
+        }
+        .nested-tab-link {
+            @apply text-black;
+            @apply bg-[#f3f4f6];
+            @apply px-5 py-2;
+            @apply border-2;
+            @apply rounded-md;
+            @apply transition-colors;
+            @apply duration-300;
+            @apply hover:bg-[#e5e7eb];
+        }
+        .nested-tab-link.active-tab {
+            @apply text-black;
+            @apply border-4;
+            @apply border-solid;
+            @apply border-red-600;  
+        }
+        .sign-in_and-sign-up {
+            @apply hidden;
+            @apply fixed;
+            @apply top-1/2;
+            @apply left-1/2;
+            @apply transform;
+            @apply -translate-x-1/2;
+            @apply -translate-y-1/2;
+            @apply bg-black;
+            @apply px-16 py-4;
+            @apply rounded-lg;
+            @apply shadow-[0_0_10px_rgb(255,255,255)];
+            @apply z-50;
+            @apply w-[500px];
+            @apply backdrop:filter;
+            @apply backdrop-blur-xl;
+        }
+        .login-popup.active, .signup-popup.active {
+            @apply block;
+        }
+        .sign-in_and-sign-up-input {
+            @apply text-sm;
+            @apply text-black;
+            @apply w-full;
+            @apply p-[6px];
+            @apply mb-3;
+            @apply border-none;
+            @apply rounded-md;
+        }
+        .sign-in_and-sign-up-button {
+            @apply w-full;
+            @apply p-2;
+            @apply mt-2 mb-2;
+            @apply bg-red-600;
+            @apply border-none;
+            @apply rounded-md;
+            @apply cursor-pointer;
+            @apply hover:bg-red-800;
+        }
+        .login-popup .close-btn, .signup-popup .close-btn {
+            @apply absolute;
+            @apply top-2;
+            @apply right-3;
+            @apply cursor-pointer;
+            @apply hover:text-red-600;
+            @apply hover:text-xl;
+        }
+        .blur-background {
+            @apply filter;
+            @apply blur-sm;
+            @apply pointer-events-none;
+            @apply select-none;
+        }
+        .dropdown {
+            @apply relative;
+            @apply inline-block;
+        }
+        .dropdown-content {
+            @apply hidden;
+            @apply absolute;
+            @apply -right-1;
+            @apply border-4;
+            @apply border-black;
+            @apply w-56;
+            @apply bg-white;
+            @apply rounded-md;
+            @apply shadow-lg;
+            @apply z-40;
+            /* @apply max-h-60; */ /* Set max height */
+            /* @apply overflow-y-auto;  *//* Enable vertical scrolling */
+        }
+        .dropdown-content a {
+            @apply block;
+            @apply px-4;
+            @apply py-2;
+            @apply bottom-1;
+            @apply rounded;
+            @apply text-black;
+            @apply hover:bg-gray-200;
+            /* @apply bg-black; */ /* Set background color */
+        }
+        .dropdown:hover .dropdown-content {
+            @apply block;
+        }
+
+        .sign-in-btn {
+            @apply px-8 py-1;
+            @apply mx-7;
+            @apply font-bold;
+            @apply text-end;
+            @apply transition-all;
+            @apply duration-300; 
+            @apply bg-red-600;
+            @apply border-2;
+            @apply border-transparent;
+            @apply rounded;
+            @apply hover:bg-black;
+            @apply hover:border-red-600;
+        }
+
+        .dropdown-btn {
+            @apply px-14 py-1;
+            @apply bg-black;
+            @apply text-white;
+            @apply font-bold;
+            @apply transition-all;
+            @apply duration-300; 
+            @apply border-2;
+            @apply border-red-600;
+            @apply rounded;
+            @apply hover:text-red-600;
+            @apply hover:border-white;
+        }
+
+        .sign-in-btn.hidden, #txtUser.hidden {
+            /* @apply hidden; */
+        }
+        body {
+            filter: brightness(0.8);
+            background-image: url('Img/bg.jpg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+    </style>
+
+</head>
+<body class="text-white bg-black">
+
+    <!-- Sign In -->
+    <div class="login-popup sign-in_and-sign-up">
+        <span class="close-btn">&times;</span>
+        <h2 class="pb-4 text-xl font-bold text-center text-red-600">Login</h2>
+        <input id="txtUsername_Login" type="text" placeholder="Username or Email" class="sign-in_and-sign-up-input">
+        <input id="txtPassword_Login" type="password" placeholder="Password" class="sign-in_and-sign-up-input">
+        <div class="flex items-center justify-between">
+            <label><input type="checkbox"> Remember me</label>
+            <a href="#" class="text-sm text-red-600 hover:underline">Forgot password?</a>
+        </div>
+        <button class="sign-in_and-sign-up-button" onclick='login()'>Login</button>
+        <p class="text-center">Don't have an account? <a href="#" class="text-red-600 hover:underline register-link">Register</a></p>
+        <!-- <p id="message_Login" class="text-center"></p> -->
+        <h3 id="message_Login" class="p-5 text-center text-red-600"> </h3>
+        
+    </div>
+
+    <!-- Sign Up -->
+    <div class="signup-popup sign-in_and-sign-up">
+        <span class="close-btn">&times;</span>
+        <h2 class="pb-4 text-xl font-bold text-center text-red-600">Sign Up</h2>
+        <div class="grid grid-cols-2 gap-x-6">
+            <div>
+                <label for="txtUsername_CusReg">Username</label>
+                <input id="txtUsername_CusReg" type="text" placeholder="exampleuser" class="sign-in_and-sign-up-input" required>
+            </div>
+            <div></div>
+            <div>
+                <label for="txtPassword_CusReg">Password</label>
+                <input id="txtPassword_CusReg" type="password" placeholder="********" class="sign-in_and-sign-up-input" required>
+            </div>
+            <div>
+                <label for="txtConPassword_CusReg">Confirm Password</label>
+                <input id="txtConPassword_CusReg" type="password" placeholder="********" class="sign-in_and-sign-up-input" required>
+            </div>
+            <div>
+                <label for="txtEmail_CusReg">Email</label>
+                <input id="txtEmail_CusReg" type="email" placeholder="example@gmail.com" class="sign-in_and-sign-up-input" required>
+            </div>
+            <div>
+                <label for="txtFirstName_CusReg">First Name</label>
+                <input id="txtFirstName_CusReg" type="text" placeholder="John" class="sign-in_and-sign-up-input" required>
+            </div>
+            <div>
+                <label for="txtLastName_CusReg">Last Name</label>
+                <input id="txtLastName_CusReg" type="text" placeholder="Doe" class="sign-in_and-sign-up-input" required>
+            </div>
+            <div>
+                <label for="txtAddress_CusReg">Address</label>
+                <input id="txtAddress_CusReg" type="text" placeholder="123 Main St" class="sign-in_and-sign-up-input" required>
+            </div>
+            <div>
+                <label for="txtNIC_CusReg">NIC Number</label>
+                <input id="txtNIC_CusReg" type="text" placeholder="123456789V" class="sign-in_and-sign-up-input" required>
+            </div>
+            <div>
+                <label for="txtPhone_CusReg">Phone Number</label>
+                <input id="txtPhone_CusReg" type="text" placeholder="0771234567" class="sign-in_and-sign-up-input" required>
+            </div>
+        </div>
+        <div class="mt-2">
+            <label><input type="checkbox" id="termsCheckbox_CusReg"> I agree to the <a href="#" class="text-red-600 hover:underline">Terms & Conditions</a></label>
+        </div>
+        <button class="sign-in_and-sign-up-button" onclick='registerCustomer()'>Sign Up</button>
+        <p class="text-center">Already have an account? <a href="#" class="text-red-600 hover:underline sign-in-link">Login</a></p>
+        <h3 id="message_CusReg" class="mt-1 text-center text-red-600"></h3>
+    </div>
+    
+    
+    <!-- All Page -->
+    <div class="blur-wrapper">
+        <!-- Navbar -->
+        <nav class="flex items-center justify-between p-5 mt-4 bg-black">
+            <div class="text-2xl font-big-shoulders">Mega <span class="font-sans">City Cabs</span></div>
+            <!-- nav-links -->
+            <ul class="flex space-x-6 font-bold">
+                <li><a href="#ride" class="px-4 py-2 transition-all duration-300 hover:text-red-600 active-tab">Ride</a></li>
+                <li><a href="#tours" class="px-4 py-2 transition-all duration-300 hover:text-red-600">Tours</a></li>
+                <li><a href="#airport_transfer" class="px-4 py-2 transition-all duration-300 hover:text-red-600">Airport Transfer</a></li>
+                <li><a href="#about" class="px-4 py-2 transition-all duration-300 hover:text-red-600">About</a></li>
+                <li><a href="#contact" class="px-4 py-2 transition-all duration-300 hover:text-red-600">Contact</a></li>
+            </ul>
+            <div class="flex items-center">
+                <button class="sign-in-btn">Sign In</button>
+                <div class="dropdown">
+                    <!-- <button id="txtUser" class="hidden px-10 py-1 font-bold "></button> -->
+                    <button id="txtUser" value="" class="hidden text-right dropdown-btn"></button>
+                    <div class="dropdown-content">
+                        <a href="#edit-profile">Edit Profile</a>
+                        <a href="#logout">Logout</a>
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- tab group -->
+            <div class="m-8 mt-24 tabs">
+
+                <!-- Tab Group Buttons -->
+                <ul class="flex justify-center space-x-6 font-bold">
+                    <li><a href="#airport_pickup" class="main-tab tab-link active-tab" data-target="#tab-airport-pickup">Airport Pickup</a></li>
+                    <li><a href="#airport_drop" class="main-tab tab-link" data-target="#tab-airport-drop">Airport Drop</a></li>
+                    <li><a href="#ride_now" class="main-tab tab-link" data-target="#tab-ride-now">Ride Now</a></li>
+                    <li><a href="#tours" class="main-tab tab-link" data-target="#tab-tours">Tours</a></li>
+                </ul>
+
+                <!-- Tab Airport Pickup -->
+                <div id="tab-airport-pickup" class="p-4 m-12 border border-red-300 shadow-lg shadow-red-400 rounded-xl tab-content active">
+                    <h2 class="p-5">Select a vehicle</h2>
+
+                    <div class="nested-tabs">
+
+                        <!-- Nested Tab Group Buttons -->
+                        <ul class="flex ml-5 space-x-6 font-bold">
+                            <li><a id="Budget" href="#budget" class="nested-tab-link active-tab" data-target="#tab-airport-pickup-budget">Budget</a></li>
+                            <li><a id="City" href="#city" class="nested-tab-link" data-target="#tab-airport-pickup-city">City</a></li>
+                            <li><a id="Semi" href="#semi" class="nested-tab-link" data-target="#tab-airport-pickup-semi">Semi</a></li>
+                            <li><a id="Car" href="#car" class="nested-tab-link" data-target="#tab-airport-pickup-car">Car</a></li>
+                            <li><a id="9 Seater" href="#9_Seater" class="nested-tab-link" data-target="#tab-airport-pickup-9-seater">9 Seater</a></li>
+                            <li><a id="14 Seater" href="#14_Seater" class="nested-tab-link" data-target="#tab-airport-pickup-14-seater">14 Seater</a></li>
+                        </ul>
+                        <div id="nested-tab-content-airport-pickup" class="mt-4 ml-5 nested-tab-content active">
+                            <div class="flex gap-5 mt-10 text-lg">
+                                <div class="w-2/3 border-2 rounded-lg">
+                                    <div class="grid grid-cols-3 gap-10 p-10 ">
+                                        <p class="flex justify-center">Test 01</p>
+                                        <p class="flex justify-center">Test 02</p>
+                                        <p class="flex justify-center">Test 03</p>
+                                        <p class="flex justify-center">Test 04</p>
+                                        <p class="flex justify-center">Test 05</p>
+                                    </div>
+                                </div>
+                                <div class="w-1/3 mr-10 border-2 rounded-lg">
+                                    <div class="flex justify-center p-16">
+                                        <p id="trip-cost" class="">Test 06</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                    
+                    <div class="flex items-center justify-between mt-8 mb-5">
+                        <div>
+                            <select id="pickup-city-dropdown" class="p-2 m-2 text-white bg-transparent bg-black border rounded w-72" disabled>
+                                <option value="" disabled selected class="text-black bg-gray-500">Select Pick Up Location</option>
+                            </select>
+                            <select id="drop-city-dropdown" class="p-2 m-2 text-white bg-transparent bg-black border rounded w-72">
+                                <option value="" disabled selected class="text-black bg-gray-500">Select Drop Location</option>
+                            </select>
+                            <input type="datetime-local" class="p-2 m-2 text-white bg-transparent border border-gray-300 rounded" id="datetime-local">
+                        </div>
+                        <button class="p-2 px-8 m-2 mr-8 font-bold bg-black border-2 border-red-600 rounded hover:bg-red-600 book-now-btn" onclick='bookTrip()'>Book Now</button>
+                    </div>
+                    
+                </div>
+                
+                <!-- tab airport drop -->
+                <div id="tab-airport-drop" class="p-4 m-12 border border-red-300 shadow-lg shadow-red-400 rounded-xl tab-content">
+                    <h2 class="p-5">Select a vehicle</h2>
+
+                    <div class="nested-tabs">
+
+                        <!-- Nested Tab Group Buttons -->
+                        <ul class="flex ml-5 space-x-6 font-bold">
+                            <li><a id="Budget" href="#budget" class="nested-tab-link active-tab" data-target="#tab-airport-drop-budget">Budget</a></li>
+                            <li><a id="City" href="#city" class="nested-tab-link" data-target="#tab-airport-drop-city">City</a></li>
+                            <li><a id="Semi" href="#semi" class="nested-tab-link" data-target="#tab-airport-drop-semi">Semi</a></li>
+                            <li><a id="Car" href="#car" class="nested-tab-link" data-target="#tab-airport-drop-car">Car</a></li>
+                            <li><a id="9 Seater" href="#9_Seater" class="nested-tab-link" data-target="#tab-airport-drop-9-seater">9 Seater</a></li>
+                            <li><a id="14 Seater" href="#14_Seater" class="nested-tab-link" data-target="#tab-airport-drop-14-seater">14 Seater</a></li>
+                        </ul>
+                        <div id="nested-tab-content-airport-drop" class="mt-4 ml-5 nested-tab-content active">
+                            <div class="flex gap-5 mt-10 text-lg">
+                                <div class="w-2/3 border-2 rounded-lg">
+                                    <div class="grid grid-cols-3 gap-10 p-10 ">
+                                        <p class="flex justify-center">Test 01</p>
+                                        <p class="flex justify-center">Test 02</p>
+                                        <p class="flex justify-center">Test 03</p>
+                                        <p class="flex justify-center">Test 04</p>
+                                        <p class="flex justify-center">Test 05</p>
+                                    </div>
+                                </div>
+                                <div class="w-1/3 mr-10 border-2 rounded-lg">
+                                    <div class="flex justify-center p-16">
+                                        <p class="">Test 06</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                    
+                    <div class="flex items-center justify-between mt-8 mb-5">
+                        <div>
+                            <select id="pickup-city-dropdown" class="p-2 m-2 text-white bg-transparent bg-black border rounded w-72">
+                                <option value="" disabled selected class="text-black bg-gray-500">Select Pick Up Location</option>
+                            </select>
+                            <select id="drop-city-dropdown" class="p-2 m-2 text-white bg-transparent bg-black border rounded w-72" disabled>
+                                <option value="" disabled selected class="text-black bg-gray-500">Select Drop Location</option>
+                            </select>
+                            <input type="datetime-local" class="p-2 m-2 text-white bg-transparent border border-gray-300 rounded" id="datetime-local">
+                        </div>
+                        <button class="p-2 px-8 m-2 mr-8 font-bold bg-black border-2 border-red-600 rounded hover:bg-red-600 book-now-btn" onclick='bookTrip()'>Book Now</button>
+                    </div>
+                    
+                </div>
+
+                <!-- tab ride now -->
+                <div id="tab-ride-now" class="p-4 m-12 border border-red-300 shadow-lg shadow-red-400 rounded-xl tab-content">
+                    <h2 class="p-5">Select a vehicle</h2>
+
+                    <div class="nested-tabs">
+
+                        <!-- Nested Tab Group Buttons -->
+                        <ul class="flex ml-5 space-x-6 font-bold">
+                            <li><a id="Budget" href="#budget" class="nested-tab-link active-tab" data-target="#tab-ride-now-budget">Budget</a></li>
+                            <li><a id="City" href="#city" class="nested-tab-link" data-target="#tab-ride-now-city">City</a></li>
+                            <li><a id="Semi" href="#semi" class="nested-tab-link" data-target="#tab-ride-now-semi">Semi</a></li>
+                            <li><a id="Car" href="#car" class="nested-tab-link" data-target="#tab-ride-now-car">Car</a></li>
+                            <li><a id="9 Seater" href="#9_Seater" class="nested-tab-link" data-target="#tab-ride-now-9-seater">9 Seater</a></li>
+                            <li><a id="14 Seater" href="#14_Seater" class="nested-tab-link" data-target="#tab-ride-now-14-seater">14 Seater</a></li>
+                        </ul>
+                        <div id="nested-tab-content-ride-now" class="mt-4 ml-5 nested-tab-content active">
+                            <div class="flex gap-5 mt-10 text-lg">
+                                <div class="w-2/3 border-2 rounded-lg">
+                                    <div class="grid grid-cols-3 gap-10 p-10 ">
+                                        <p class="flex justify-center">Test 01</p>
+                                        <p class="flex justify-center">Test 02</p>
+                                        <p class="flex justify-center">Test 03</p>
+                                        <p class="flex justify-center">Test 04</p>
+                                        <p class="flex justify-center">Test 05</p>
+                                    </div>
+                                </div>
+                                <div class="w-1/3 mr-10 border-2 rounded-lg">
+                                    <div class="flex justify-center p-16">
+                                        <p class="">Test 06</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                    
+                    <div class="flex items-center justify-between mt-8 mb-5">
+                        <div>
+                            <select id="pickup-city-dropdown" class="p-2 m-2 text-white bg-transparent bg-black border rounded w-72">
+                                <option value="" disabled selected class="text-black bg-gray-500">Select Pick Up Location</option>
+                            </select>
+                            <select id="drop-city-dropdown" class="p-2 m-2 text-white bg-transparent bg-black border rounded w-72">
+                                <option value="" disabled selected class="text-black bg-gray-500">Select Drop Location</option>
+                            </select>
+                            <input type="datetime-local" class="p-2 m-2 text-white bg-transparent border border-gray-300 rounded" id="datetime-local">
+                        </div>
+                        <button class="p-2 px-8 m-2 mr-8 font-bold bg-black border-2 border-red-600 rounded hover:bg-red-600 book-now-btn" onclick='bookTrip()'>Book Now</button>
+                    </div>
+                    
+                </div>
+
+                <!-- tab tours -->
+                <div id="tab-tours" class="m-12 border border-red-300 shadow-lg p-52 shadow-red-400 rounded-xl tab-content">
+                    <p class="flex justify-center text-4xl italic underline">Will be update soon...</p>
+                </div>
+                
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>

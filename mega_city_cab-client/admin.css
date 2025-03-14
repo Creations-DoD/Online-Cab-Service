@@ -1,0 +1,40 @@
+
+        /* Add custom styles for scroll bar and sticky header */
+        .table__body {
+            max-height: 80vh; /* Set max height for table body */
+            overflow-y: auto;
+            overflow-x: auto; /* Enable horizontal scrolling */
+        }
+        thead th {
+            position: sticky;
+            top: 0;
+            background-color: #1f2937; /* Tailwind's bg-gray-800 */
+        }
+        .table__body::-webkit-scrollbar {
+            width: 0.5rem;
+            height: 0.5rem; /* Add horizontal scrollbar height */
+        }
+        .table__body::-webkit-scrollbar-thumb {
+            border-radius: 0.5rem;
+            background-color: #4b5563; /* Tailwind's bg-gray-600 */
+        }
+        th, td {
+            white-space: nowrap; /* Ensure content fits in one line */
+        }
+        .selected-row {
+            background-color: #374151; /* Tailwind's bg-gray-700 */
+        }
+        .editable {
+            background-color: #1f2937; /* Tailwind's bg-gray-800 */
+            border: 1px solid #4b5563; /* Tailwind's bg-gray-600 */
+        }
+        .disabled-button {
+            background-color: #6b7280; /* Tailwind's bg-gray-500 */
+            cursor: not-allowed;
+        }
+        .disabled-button:hover {
+            background-color: #6b7280; /* Tailwind's bg-gray-500 */
+        }
+        .selected-row .availability-cell:hover {
+            cursor: pointer;
+        }
