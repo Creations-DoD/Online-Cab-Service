@@ -186,7 +186,8 @@ public class DriverUtil {
         }
 
         // Proceed with database update
-        String query = "UPDATE driver SET name = ?, address = ?, phone_number = ?, license_number = ? WHERE driver_id = ?";
+        String query = "UPDATE driver SET name = ?, address = ?, phone_number = ?, license_number = ?, "
+                + "availability = ? WHERE driver_id = ?";
 
         try (Connection conn = DBConn.getInstance().getConnection();
              PreparedStatement pstmt = conn.prepareStatement(query)) {
@@ -195,7 +196,8 @@ public class DriverUtil {
             pstmt.setString(2, driver.getAddress());
             pstmt.setString(3, driver.getPhoneNumber());
             pstmt.setString(4, driver.getLicenseNumber());
-            pstmt.setString(5, driver.getDriverId());
+            pstmt.setBoolean(5, driver.isAvailability());
+            pstmt.setString(6, driver.getDriverId());
             int rowsUpdated = pstmt.executeUpdate();
 
             return rowsUpdated > 0; // Returns true if at least one row was updated
@@ -251,6 +253,23 @@ public class DriverUtil {
         }
     }
 
+    
+    // Method to get a available all drivers
+    public static List<String> getAllAvailableDrivers() {
+        List<String> driver = new ArrayList<>();
+        String query = "SELECT driver_id FROM driver WHERE availability = 1";
+        try (Connection conn = DBConn.getInstance().getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(query)) {
+            ResultSet rs = pstmt.executeQuery();
+
+            while (rs.next()) {
+                driver.add(rs.getString("driver_id"));
+            }
+        } catch (SQLException ex) {
+            System.out.println(ex);
+        }
+        return driver;
+    }
 }
 
 

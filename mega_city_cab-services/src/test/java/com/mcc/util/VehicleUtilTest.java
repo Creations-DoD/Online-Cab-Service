@@ -40,11 +40,19 @@ public class VehicleUtilTest {
         testVehicle = new Vehicle();
         
         testVehicle.setModel("Test vehicle model");
-        testVehicle.setCapacity(3);
+        testVehicle.setModelId(2);
         testVehicle.setAvailability(true);
         testVehicle.setLicensePlate("WP XXX-0000");
+        testVehicle.setCapacity(3);
+        
+        testVehicle.setVehicleType("City");
+        testVehicle.setModel("Suzuki WagonR");
+        testVehicle.setCondition("Air Conditioned");
+        testVehicle.setCapacity(4);
+        testVehicle.setBaggagers("Limited");
+        testVehicle.setPrice(80.00);
     }
-    
+
     @After
     public void tearDown() {
     }
@@ -71,10 +79,16 @@ public class VehicleUtilTest {
         Vehicle resultVehicle = VehicleUtil.getVehicle(testVehicle.getVehicleId());
         
         assertEquals(testVehicle.getVehicleId(), resultVehicle.getVehicleId());
-        assertEquals(testVehicle.getModel(), resultVehicle.getModel());
-        assertEquals(testVehicle.getCapacity(), resultVehicle.getCapacity());
+        assertEquals(testVehicle.getModelId(), resultVehicle.getModelId());
         assertEquals(testVehicle.isAvailability(), resultVehicle.isAvailability());
         assertEquals(testVehicle.getLicensePlate(), resultVehicle.getLicensePlate());
+        
+        assertEquals(testVehicle.getVehicleType(), resultVehicle.getVehicleType());
+        assertEquals(testVehicle.getModel(), resultVehicle.getModel());
+        assertEquals(testVehicle.getCondition(), resultVehicle.getCondition());
+        assertEquals(testVehicle.getCapacity(), resultVehicle.getCapacity());
+        assertEquals(testVehicle.getBaggagers(), resultVehicle.getBaggagers());
+        assertEquals(testVehicle.getPrice(), resultVehicle.getPrice());
     }
     
     
@@ -94,10 +108,16 @@ public class VehicleUtilTest {
             }
         }
         assertEquals(testVehicle.getVehicleId(), resultVehicle.getVehicleId());
-        assertEquals(testVehicle.getModel(), resultVehicle.getModel());
-        assertEquals(testVehicle.getCapacity(), resultVehicle.getCapacity());
+        assertEquals(testVehicle.getModelId(), resultVehicle.getModelId());
         assertEquals(testVehicle.isAvailability(), resultVehicle.isAvailability());
         assertEquals(testVehicle.getLicensePlate(), resultVehicle.getLicensePlate());
+        
+        assertEquals(testVehicle.getVehicleType(), resultVehicle.getVehicleType());
+        assertEquals(testVehicle.getModel(), resultVehicle.getModel());
+        assertEquals(testVehicle.getCondition(), resultVehicle.getCondition());
+        assertEquals(testVehicle.getCapacity(), resultVehicle.getCapacity());
+        assertEquals(testVehicle.getBaggagers(), resultVehicle.getBaggagers());
+        assertEquals(testVehicle.getPrice(), resultVehicle.getPrice());
     }
     
     
@@ -108,7 +128,7 @@ public class VehicleUtilTest {
         
         setVehicleID(testVehicle.getLicensePlate());
         testVehicle.setModel("Updated Test vehicle model");
-        testVehicle.setCapacity(2);
+        testVehicle.setModelId(1);
         testVehicle.setAvailability(false);
         testVehicle.setLicensePlate("WP XXX-0000"); // Can't update. Use for get vehicle id.
         
@@ -121,8 +141,7 @@ public class VehicleUtilTest {
         Vehicle checkResultVehicle = VehicleUtil.getVehicle(testVehicle.getVehicleId());
         
         assertEquals(testVehicle.getVehicleId(), checkResultVehicle.getVehicleId());
-        assertEquals(testVehicle.getModel(), checkResultVehicle.getModel());
-        assertEquals(testVehicle.getCapacity(), checkResultVehicle.getCapacity());
+        assertEquals(testVehicle.getModelId(), checkResultVehicle.getModelId());
         assertEquals(testVehicle.isAvailability(), checkResultVehicle.isAvailability());
         assertEquals(testVehicle.getLicensePlate(), checkResultVehicle.getLicensePlate());
     }

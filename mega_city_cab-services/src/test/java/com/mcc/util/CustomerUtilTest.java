@@ -7,6 +7,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Map;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -116,24 +117,33 @@ public class CustomerUtilTest {
     @Test
     public void test_05_ValidateUser() {
         System.out.println("Test Login - validateUser()");
-        
+
         String invalidUsername = "testInvalidUser";
         String invalidPassword = "testInvalidPass";
         String expResult = "Customer";
-        
+
+        assertNotNull(testCustomer);
+        assertNotNull(testCustomer.getUsername());
+        assertNotNull(testCustomer.getPassword());
+
         // Test valid login
-        String result = CustomerUtil.validateUser(testCustomer.getUsername(), testCustomer.getPassword());
-        assertEquals(expResult, result);
+        Map<String, String> resultUserDetails = 
+                CustomerUtil.validateUser(testCustomer.getUsername(), testCustomer.getPassword());
+        assertNotNull(resultUserDetails);
+
+        assertEquals(expResult, resultUserDetails.get("role"));
+        assertEquals(testCustomer.getUsername(), resultUserDetails.get("username"));
+        assertNotNull(resultUserDetails.get("userID")); // Ensure userID is not null for valid roles
 
         // Test invalid login username
-        result = CustomerUtil.validateUser(invalidUsername, testCustomer.getPassword());
-        assertNull(result);
-        
+        resultUserDetails = CustomerUtil.validateUser(invalidUsername, testCustomer.getPassword());
+        assertNull(resultUserDetails);
+
         // Test invalid login password
-        result = CustomerUtil.validateUser(testCustomer.getUsername(), invalidPassword);
-        assertNull(result);
+        resultUserDetails = CustomerUtil.validateUser(testCustomer.getUsername(), invalidPassword);
+        assertNull(resultUserDetails);
     }
-    
+
 
     // Test of updateCustomer method, of class CustomerUtil.
     @Test

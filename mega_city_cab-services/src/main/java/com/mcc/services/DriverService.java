@@ -16,6 +16,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.OPTIONS;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
@@ -23,19 +24,34 @@ import javax.ws.rs.core.Response;
 @Path("/driver")
 public class DriverService {
 
+    // Handle preflight OPTIONS requests
+    @OPTIONS
+    public Response handlePreflight() {
+        return CORSFilter.handlePreflight();
+    }
+    
+    // Handle preflight OPTIONS requests for the specific path
+    @OPTIONS
+    @Path("/{driverId}")
+    public Response handlePreflight(@PathParam("driverId") String driverId) {
+        return CORSFilter.handlePreflight();
+    }
+    
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public String getAllDrivers(){
+    public Response getAllDrivers(){
         Gson gson = new GsonBuilder().create();
-        return gson.toJson(DriverUtil.getAllDrivers());
+        String jsonResponse =  gson.toJson(DriverUtil.getAllDrivers());
+        return CORSFilter.addCorsHeaders(Response.ok(jsonResponse)).build();
     }
     
     @GET
     @Path("/{driverId}")
     @Produces(MediaType.APPLICATION_JSON)
-    public String getDriver(@PathParam("driverId") String driverId){
+    public Response getDriver(@PathParam("driverId") String driverId){
         Gson gson = new GsonBuilder().create();
-        return gson.toJson(DriverUtil.getDriver(driverId));
+        String jsonResponse = gson.toJson(DriverUtil.getDriver(driverId));
+        return CORSFilter.addCorsHeaders(Response.ok(jsonResponse)).build();
     }
 
     @POST
@@ -48,34 +64,34 @@ public class DriverService {
         
         // Validate input fields
         if (!ValidationUtil.isValidUsername(driver.getUsername())) {
-            return Response.status(Response.Status.BAD_REQUEST)
+            return CORSFilter.addCorsHeaders(Response.status(Response.Status.BAD_REQUEST))
                     .entity("{\"message\": \"Invalid username format.\"}")
                     .build();
         }
         if (!ValidationUtil.isValidEmail(driver.getEmail())) {
-            return Response.status(Response.Status.BAD_REQUEST)
+            return CORSFilter.addCorsHeaders(Response.status(Response.Status.BAD_REQUEST))
                     .entity("{\"message\": \"Invalid email format.\"}")
                     .build();
         }
         if (!ValidationUtil.isValidNIC(driver.getNic())) {
-            return Response.status(Response.Status.BAD_REQUEST)
+            return CORSFilter.addCorsHeaders(Response.status(Response.Status.BAD_REQUEST))
                     .entity("{\"message\": \"Invalid NIC format.\"}")
                     .build();
         }
         if (!ValidationUtil.isValidPhoneNumber(driver.getPhoneNumber())) {
-            return Response.status(Response.Status.BAD_REQUEST)
+            return CORSFilter.addCorsHeaders(Response.status(Response.Status.BAD_REQUEST))
                     .entity("{\"message\": \"Invalid phone number format.\"}")
                     .build();
         }
         if (!ValidationUtil.isValidDrivingLicense(driver.getLicenseNumber())) {
-            return Response.status(Response.Status.BAD_REQUEST)
+            return CORSFilter.addCorsHeaders(Response.status(Response.Status.BAD_REQUEST))
                     .entity("{\"message\": \"Invalid driving license number format.\"}")
                     .build();
         }
 
         // Check if username already exists
         if (DriverUtil.isUsernameExists(driver.getUsername())) {
-            return Response.status(Response.Status.BAD_REQUEST)
+            return CORSFilter.addCorsHeaders(Response.status(Response.Status.BAD_REQUEST))
                     .entity("{\"message\": \"Username already exists.\"}")
                     .build();
         }
@@ -84,11 +100,11 @@ public class DriverService {
         boolean isAdded = DriverUtil.addDriver(driver);
 
         if (isAdded) {
-            return Response.status(Response.Status.CREATED)
+            return CORSFilter.addCorsHeaders(Response.status(Response.Status.CREATED))
                     .entity("{\"message\": \"Driver added successfully!\"}")
                     .build();
         } else {
-            return Response.status(Response.Status.NOT_IMPLEMENTED)
+            return CORSFilter.addCorsHeaders(Response.status(Response.Status.NOT_IMPLEMENTED))
                     .entity("{\"message\": \"Failed to add driver.\"}")
                     .build();
         }
@@ -104,12 +120,12 @@ public class DriverService {
         
         // Validate phone number
         if (!ValidationUtil.isValidPhoneNumber(driver.getPhoneNumber())) {
-            return Response.status(Response.Status.BAD_REQUEST)
+            return CORSFilter.addCorsHeaders(Response.status(Response.Status.BAD_REQUEST))
                     .entity("{\"message\": \"Invalid phone number format.\"}")
                     .build();
         }
         if (!ValidationUtil.isValidDrivingLicense(driver.getLicenseNumber())) {
-            return Response.status(Response.Status.BAD_REQUEST)
+            return CORSFilter.addCorsHeaders(Response.status(Response.Status.BAD_REQUEST))
                     .entity("{\"message\": \"Invalid driving license number format.\"}")
                     .build();
         }
@@ -118,11 +134,11 @@ public class DriverService {
         boolean isUpdated = DriverUtil.updateDriver(driver);
 
         if (isUpdated) {
-            return Response.status(Response.Status.OK)
+            return CORSFilter.addCorsHeaders(Response.status(Response.Status.OK))
                     .entity("{\"message\": \"Driver updated successfully!\"}")
                     .build();
         } else {
-            return Response.status(Response.Status.NOT_IMPLEMENTED)
+            return CORSFilter.addCorsHeaders(Response.status(Response.Status.NOT_IMPLEMENTED))
                     .entity("{\"message\": \"Failed to update driver.\"}")
                     .build();
         }
@@ -134,15 +150,24 @@ public class DriverService {
     public Response deleteDriver(@PathParam("driverId") String driverId) {
         boolean isDeleted = DriverUtil.deleteDriver(driverId);
         if (isDeleted) {
-            return Response.status(Response.Status.OK)
+            return CORSFilter.addCorsHeaders(Response.status(Response.Status.OK))
                     .entity("{\"message\": \"Driver deleted successfully!\"}")
                     .build();
         } else {
-            return Response.status(Response.Status.BAD_REQUEST)
+            return CORSFilter.addCorsHeaders(Response.status(Response.Status.BAD_REQUEST))
                     .entity("{\"message\": \"Failed to delete driver.\"}")
                     .build();
         }
     }
     
+    
+    @GET
+    @Path("/available")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getAllAvailableDrivers(){
+        Gson gson = new GsonBuilder().create();
+        String jsonResponse =  gson.toJson(DriverUtil.getAllAvailableDrivers());
+        return CORSFilter.addCorsHeaders(Response.ok(jsonResponse)).build();
+    }
     
 }

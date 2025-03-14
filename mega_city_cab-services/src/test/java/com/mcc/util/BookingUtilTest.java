@@ -38,8 +38,8 @@ public class BookingUtilTest {
         
         testBooking.setBookingId("B-TEST0001");
         testBooking.setCustomerId("CUS-EXAM01");
-        testBooking.setVehicleId("VEH-EXAM01");
-        testBooking.setDriverId("DRV-EXAM01");
+        testBooking.setVehicleId(null);
+        testBooking.setDriverId(null);
         testBooking.setCity_distance_id(1);
         testBooking.setBooking_date(Timestamp.valueOf("2011-11-11 11:11:11"));
         testBooking.setStatus("Pending");
@@ -115,10 +115,9 @@ public class BookingUtilTest {
     public void test_04_UpdateBooking() {
         System.out.println("Test Update Booking - updateBooking()");
         
-        testBooking.setCity_distance_id(2);
-        testBooking.setBooking_date(Timestamp.valueOf("2012-12-12 12:12:12"));
+        testBooking.setVehicleId("VEH-EXAM01");
+        testBooking.setDriverId("DRV-EXAM01");
         testBooking.setStatus("Completed");
-        testBooking.setFare(100.00);
         testBooking.setPayment_status("Paid");
         
         boolean expResult = true;

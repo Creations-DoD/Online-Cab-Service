@@ -131,6 +131,7 @@ public class DriverUtilTest {
         testDriver.setName("Updated Driver Name");
         testDriver.setAddress("456 Updated Driver Street");
         testDriver.setPhoneNumber("+94771111111");
+        testDriver.setAvailability(false);
         
         boolean expResult = true;
         boolean result = DriverUtil.updateDriver(testDriver);

@@ -11,8 +11,32 @@ public class Booking {
     private int city_distance_id;
     private Timestamp booking_date;
     private String status;
-    private Double fare ;
+    private Double fare;
     private String payment_status;
+
+    public Booking() {
+        this.bookingId = null;
+        this.customerId = null;
+        this.vehicleId = null;
+        this.driverId = null;
+        this.city_distance_id = 0;
+        this.booking_date = null;
+        this.status = null;
+        this.fare = 0.00;
+        this.payment_status = null;
+    }
+    
+    public Booking(String bookingId, String customerId, String vehicleId, String driverId, int city_distance_id, Timestamp booking_date, String status, Double fare, String payment_status) {
+        this.bookingId = bookingId;
+        this.customerId = customerId;
+        this.vehicleId = vehicleId;
+        this.driverId = driverId;
+        this.city_distance_id = city_distance_id;
+        this.booking_date = booking_date;
+        this.status = status;
+        this.fare = fare;
+        this.payment_status = payment_status;
+    }
 
     public String getBookingId() {
         return bookingId;
@@ -29,7 +53,7 @@ public class Booking {
     public void setCustomerId(String customerId) {
         this.customerId = customerId;
     }
-
+    
     public String getVehicleId() {
         return vehicleId;
     }

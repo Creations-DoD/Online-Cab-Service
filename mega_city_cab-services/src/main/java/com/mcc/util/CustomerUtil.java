@@ -6,25 +6,43 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 
 public class CustomerUtil {
     
     // Method to validate user login
-    public static String validateUser(String username, String password) {
-        String query = "SELECT role FROM user WHERE username = ? AND password = ?";
+    public static Map<String, String> validateUser(String usernameOrEmail, String password) {
+//        String query = "SELECT role FROM user WHERE (username = ? OR email = ?) AND password = ?";
+        String query = "SELECT u.role AS 'role', u.username As 'username', c.customer_id As 'cus_id', d.driver_id As 'drv_id' "
+                + "FROM user u LEFT JOIN customer c ON u.user_id = c.user_id LEFT JOIN driver d ON u.user_id = d.user_id "
+                + "WHERE (u.username = ? OR u.email = ?) AND u.password = ?";
         try (Connection conn = DBConn.getInstance().getConnection();
              PreparedStatement pstmt = conn.prepareStatement(query)) {
-            pstmt.setString(1, username);
-            pstmt.setString(2, password);
+            pstmt.setString(1, usernameOrEmail);
+            pstmt.setString(2, usernameOrEmail);
+            pstmt.setString(3, password);
             ResultSet rs = pstmt.executeQuery();
             if (rs.next()) {
-                return rs.getString("role"); // Return the user's role
+                Map<String, String> userDetails = new HashMap<>();
+                userDetails.put("role", rs.getString("role"));
+                userDetails.put("username", rs.getString("username"));
+
+                if (rs.getString("role").equals("Admin")) {
+                    userDetails.put("userID", "Admin");
+                } else if (rs.getString("role").equals("Customer")) {
+                    userDetails.put("userID", rs.getString("cus_id"));
+                } else if (rs.getString("role").equals("Driver")) {
+                    userDetails.put("userID", rs.getString("drv_id"));
+                }
+                return userDetails; // Return the user's Details HashMap
             }
             return null; // No matching user found
         } catch (SQLException e) {
             System.err.println("Error validating user: " + e.getMessage());
+            e.printStackTrace(); // Log the stack trace for debugging
             return null;
         }
     }
